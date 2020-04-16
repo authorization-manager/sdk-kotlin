@@ -30,3 +30,4 @@ class LibraryTest {
         authorizationManagerClient.save(user)
     }
 }
+
