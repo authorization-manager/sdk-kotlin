@@ -1,6 +1,6 @@
 package com.davidgracia.software.authorizationmanager.sdk.kotlin
 
-data class AuthorizationManagerClient(val instance: String, val apiKey: String) {
+data class AuthorizationManagerClient(val host: String, val apiKey: String) {
     fun save(user: User) {
         TODO("Not yet implemented")
     }

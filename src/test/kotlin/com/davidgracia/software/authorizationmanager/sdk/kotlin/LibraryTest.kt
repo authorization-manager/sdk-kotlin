@@ -7,12 +7,12 @@ import kotlin.test.Test
 
 class LibraryTest {
     @Test fun testSomeLibraryMethod() {
-        val instance = "myInstance"
+        val host = "localhost"
         val apiKey = "apiKey"
-        val authorizationManagerClient = AuthorizationManagerClient(instance = instance, apiKey = apiKey)
+        val authorizationManagerClient = AuthorizationManagerClient(host = host, apiKey = apiKey)
 
         val resource = Resource()
-        resource.saveAt(instance).using(apiKey)
+        resource.saveAt(host).using(apiKey)
         authorizationManagerClient.save(resource)
         //authorizationManagerClient.save(resource).at(host).using(apiKey)
 
