@@ -26,6 +26,11 @@
 - Withdraw a permission from a role.
 - Withdraw a set of permissions from a role.
 - Respond whether a permission is assigned to a role.
+
+- Create user
+- Get user
+- Update user attributes
+- Delete a user
 - Appoint user as [role].
 - Withdraw user from [role].
 - Respond whether a permission is assigned to a user.
