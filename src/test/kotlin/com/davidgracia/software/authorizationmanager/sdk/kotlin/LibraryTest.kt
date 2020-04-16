@@ -12,7 +12,9 @@ class LibraryTest {
         val authorizationManagerClient = AuthorizationManagerClient(instance = instance, apiKey = apiKey)
 
         val resource = Resource()
+        resource.saveAt(instance).using(apiKey)
         authorizationManagerClient.save(resource)
+        //authorizationManagerClient.save(resource).at(host).using(apiKey)
 
         val permission = Permission()
         authorizationManagerClient.save(permission)
