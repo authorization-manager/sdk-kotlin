@@ -15,11 +15,20 @@
 
 ## Features
 
+- Create resource.
+- Get a resource.
+- Update resource attributes
+- Delete a resource.
+
 - Create permission.
 - Update permission name.
 - Update permission description.
 - Get a permission.
 - Delete a permission.
+- Assign a permission to a resource.
+- Assign a set of permissions to a resource.
+- Withdraw a permission from a resource.
+- Withdraw a set of permissions from a resource.
 
 - Assign a permission to a role.
 - Assign a set of permissions to a role.
