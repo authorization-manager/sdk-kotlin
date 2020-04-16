@@ -4,12 +4,30 @@
 package com.davidgracia.software.authorizationmanager.sdk.kotlin
 
 import kotlin.test.Test
-import kotlin.test.assertTrue
 
 class LibraryTest {
     @Test fun testSomeLibraryMethod() {
-        val classUnderTest = Library()
-        assertTrue(classUnderTest.someLibraryMethod(), "someLibraryMethod should return 'true'")
+        val instance = "myInstance"
+        val apiKey = "apiKey"
+        val authorizationManagerClient = AuthorizationManagerClient(instance = instance, apiKey = apiKey)
+
+        val resource = Resource()
+        authorizationManagerClient.save(resource)
+
+        val permission = Permission()
+        authorizationManagerClient.save(permission)
+
+        val resourcePermission = ResourcePermission(resource, permission)
+        authorizationManagerClient.save(resourcePermission)
+
+        val role = Role(setOf(resourcePermission))
+        authorizationManagerClient.save(role)
+
+        val resourceRolePermission = ResourceRolePermission(resource, role, permission)
+        authorizationManagerClient.save(resourceRolePermission)
+
+        val user = User(setOf(role))
+        authorizationManagerClient.save(user)
     }
 }
 
