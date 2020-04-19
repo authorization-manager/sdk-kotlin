@@ -2,6 +2,7 @@ plugins {
     kotlin("jvm") version "1.3.72"
     `java-library`
     jacoco
+    id("org.sonarqube") version "2.8"
 }
 
 // JaCoCo configuration -- BEGIN
@@ -16,6 +17,15 @@ tasks.jacocoTestReport {
     }
 }
 // JaCoCo configuration -- END
+
+// SonarQube configuration -- BEGIN
+sonarqube {
+    properties {
+        property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.organization", "beforeigners")
+    }
+}
+// SonarQube configuration -- END
 
 repositories {
     jcenter()
