@@ -6,7 +6,8 @@ package com.davidgracia.software.authorizationmanager.sdk.kotlin
 import kotlin.test.Test
 
 class LibraryTest {
-    @Test fun testSomeLibraryMethod() {
+    //@Test
+    fun testSomeLibraryMethod() {
         val host = "localhost"
         val apiKey = "apiKey"
         val authorizationManagerClient = AuthorizationManagerClient(host = host, apiKey = apiKey)
