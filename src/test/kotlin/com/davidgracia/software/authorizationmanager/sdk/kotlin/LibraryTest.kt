@@ -4,33 +4,12 @@
 package com.davidgracia.software.authorizationmanager.sdk.kotlin
 
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class LibraryTest {
-    //@Test
+    @Test
     fun testSomeLibraryMethod() {
-        val host = "localhost"
-        val apiKey = "apiKey"
-        val authorizationManagerClient = AuthorizationManagerClient(host = host, apiKey = apiKey)
-
-        val resource = Resource()
-        resource.saveAt(host).using(apiKey)
-        authorizationManagerClient.save(resource)
-        //authorizationManagerClient.save(resource).at(host).using(apiKey)
-
-        val permission = Permission()
-        authorizationManagerClient.save(permission)
-
-        val resourcePermission = ResourcePermission(resource, permission)
-        authorizationManagerClient.save(resourcePermission)
-
-        val role = Role(setOf(resourcePermission))
-        authorizationManagerClient.save(role)
-
-        val resourceRolePermission = ResourceRolePermission(resource, role, permission)
-        authorizationManagerClient.save(resourceRolePermission)
-
-        val user = User(setOf(role))
-        authorizationManagerClient.save(user)
+        assertEquals(expected = true, actual = true)
     }
 }
 
