@@ -9,7 +9,8 @@ import kotlin.test.assertEquals
 class LibraryTest {
     @Test
     fun testSomeLibraryMethod() {
-        assertEquals(expected = true, actual = true)
+        val user = User("1234")
+        assertEquals(expected = user, actual = user)
     }
 }
 
