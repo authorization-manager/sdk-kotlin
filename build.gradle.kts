@@ -25,7 +25,12 @@ sonarqube {
     properties {
         property("sonar.host.url", "https://sonarcloud.io")
         property("sonar.organization", "beforeigners")
+        property("sonar.projectKey", "beforeigners_authorization-manager-sdk-kotlin")
     }
+}
+
+tasks.sonarqube {
+    dependsOn(tasks.jacocoTestReport)
 }
 // SonarQube configuration -- END
 
