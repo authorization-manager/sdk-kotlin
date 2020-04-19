@@ -26,6 +26,7 @@ sonarqube {
         property("sonar.host.url", "https://sonarcloud.io")
         property("sonar.organization", "beforeigners")
         property("sonar.projectKey", "beforeigners_authorization-manager-sdk-kotlin")
+        property("sonar.coverage.jacoco.xmlReportPaths", "$buildDir/reports/jacoco/test/jacocoTestReport.xml")
     }
 }
 
