@@ -2,7 +2,7 @@ plugins {
     kotlin("jvm") version "1.3.72"
     `java-library`
     jacoco
-    id("org.sonarqube") version "2.8"
+//    id("org.sonarqube") version "2.8"
 }
 
 // JaCoCo configuration -- BEGIN
@@ -21,7 +21,7 @@ tasks.jacocoTestReport {
 // JaCoCo configuration -- END
 
 // SonarQube configuration -- BEGIN
-sonarqube {
+/*sonarqube {
     properties {
         property("sonar.host.url", "https://sonarcloud.io")
         property("sonar.organization", "beforeigners")
@@ -30,11 +30,11 @@ sonarqube {
         property("sonar.tests", "src/test/kotlin")
         property("sonar.coverage.jacoco.xmlReportPaths", "$buildDir/reports/jacoco/test/jacocoTestReport.xml")
     }
-}
+}*/
 
-tasks.sonarqube {
+/*tasks.sonarqube {
     dependsOn(tasks.jacocoTestReport)
-}
+}*/
 // SonarQube configuration -- END
 
 repositories {
