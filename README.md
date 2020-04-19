@@ -1,5 +1,7 @@
 # authorization-manager-sdk-kotlin
 
+![](https://github.com/beforeigners/authorization-manager-sdk-kotlin/workflows/workflows/Push%20to%20master%20CI/badge.svg)
+
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=beforeigners_authorization-manager-sdk-kotlin&metric=alert_status)](https://sonarcloud.io/dashboard?id=beforeigners_authorization-manager-sdk-kotlin)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=beforeigners_authorization-manager-sdk-kotlin&metric=bugs)](https://sonarcloud.io/dashboard?id=beforeigners_authorization-manager-sdk-kotlin)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=beforeigners_authorization-manager-sdk-kotlin&metric=code_smells)](https://sonarcloud.io/dashboard?id=beforeigners_authorization-manager-sdk-kotlin)
