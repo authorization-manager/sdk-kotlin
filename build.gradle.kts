@@ -15,6 +15,8 @@ tasks.jacocoTestReport {
         xml.isEnabled = true
         html.isEnabled = true
     }
+
+    dependsOn(tasks.test)
 }
 // JaCoCo configuration -- END
 
