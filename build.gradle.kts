@@ -30,9 +30,6 @@ sonarqube {
         property("sonar.host.url", "https://sonarcloud.io")
         property("sonar.organization", "beforeigners")
         property("sonar.projectKey", "beforeigners_authorization-manager-sdk-kotlin")
-//        property("sonar.sources", "src/main/kotlin")
-//        property("sonar.tests", "src/test/kotlin")
-//        property("sonar.coverage.jacoco.xmlReportPaths", "$buildDir/reports/jacoco/test/jacocoTestReport.xml")
     }
 }
 // SonarQube configuration -- END
