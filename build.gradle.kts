@@ -15,6 +15,18 @@ spotless {
         ktlint()
     }
 }
+
+tasks.spotlessCheck {
+    mustRunAfter(tasks.classes, tasks.testClasses)
+}
+
+tasks.test {
+    mustRunAfter(tasks.spotlessCheck)
+}
+
+tasks.check {
+    dependsOn(tasks.spotlessCheck)
+}
 // spotless configuration -- END
 
 // JaCoCo configuration -- BEGIN
