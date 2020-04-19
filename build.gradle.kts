@@ -15,6 +15,8 @@ tasks.jacocoTestReport {
         xml.isEnabled = true
         html.isEnabled = true
     }
+
+    dependsOn(tasks.test)
 }
 // JaCoCo configuration -- END
 
@@ -23,7 +25,12 @@ sonarqube {
     properties {
         property("sonar.host.url", "https://sonarcloud.io")
         property("sonar.organization", "beforeigners")
+        property("sonar.projectKey", "beforeigners_authorization-manager-sdk-kotlin")
     }
+}
+
+tasks.sonarqube {
+    dependsOn(tasks.jacocoTestReport)
 }
 // SonarQube configuration -- END
 
