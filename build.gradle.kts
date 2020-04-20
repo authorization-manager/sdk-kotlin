@@ -58,6 +58,7 @@ sonarqube {
 }
 // SonarQube configuration -- END
 
+// TEST LOGGING -- BEGIN
 tasks.withType<Test> {
     testLogging {
         showStandardStreams = false
@@ -86,6 +87,13 @@ val printTestResult: KotlinClosure2<TestDescriptor, TestResult, Void>
         }
         null
     })
+// TEST LOGGING -- END
+
+// JUNIT -- BEGIN
+tasks.withType<Test> {
+    useJUnitPlatform()
+}
+// JUNIT -- END
 
 repositories {
     jcenter()
@@ -94,6 +102,9 @@ repositories {
 dependencies {
     implementation(platform(kotlin("bom")))
     implementation(kotlin("stdlib-jdk8"))
-    testImplementation(kotlin("test"))
-    testImplementation(kotlin("test-junit"))
+    implementation("com.google.code.gson:gson:2.8.6")
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.2")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.2")
+    testImplementation("org.assertj:assertj-core:3.15.0")
 }
