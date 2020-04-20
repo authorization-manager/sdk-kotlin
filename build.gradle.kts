@@ -1,3 +1,4 @@
+// PLUGINS -- BEGIN
 plugins {
     kotlin("jvm") version "1.3.72"
     `java-library`
@@ -6,26 +7,32 @@ plugins {
     id("com.diffplug.gradle.spotless") version "3.28.1"
 }
 
+allprojects {
+    apply(plugin = "kotlin")
+    java.sourceCompatibility = JavaVersion.VERSION_1_8
+}
+// PLUGINS -- END
+
 // spotless configuration -- BEGIN
-spotless {
-    kotlin {
-        ktlint()
+allprojects {
+    apply(plugin = "com.diffplug.gradle.spotless")
+
+    spotless {
+        kotlin {
+            ktlint()
+        }
+        kotlinGradle {
+            ktlint()
+        }
     }
-    kotlinGradle {
-        ktlint()
+
+    listOf(tasks.compileJava, tasks.compileKotlin, tasks.compileTestJava, tasks.compileTestKotlin).forEach {
+        it.get().mustRunAfter(tasks.spotlessCheck)
     }
-}
 
-tasks.spotlessCheck {
-    mustRunAfter(tasks.classes, tasks.testClasses)
-}
-
-tasks.test {
-    mustRunAfter(tasks.spotlessCheck)
-}
-
-tasks.check {
-    dependsOn(tasks.spotlessCheck)
+    tasks.check {
+        dependsOn(tasks.spotlessCheck)
+    }
 }
 // spotless configuration -- END
 
@@ -59,16 +66,18 @@ sonarqube {
 // SonarQube configuration -- END
 
 // TEST LOGGING -- BEGIN
-tasks.withType<Test> {
-    testLogging {
-        showStandardStreams = false
-        events("skipped", "failed")
-        showExceptions = true
-        showCauses = true
-        showStackTraces = true
-        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+allprojects {
+    tasks.withType<Test> {
+        testLogging {
+            showStandardStreams = false
+            events("skipped", "failed")
+            showExceptions = true
+            showCauses = true
+            showStackTraces = true
+            exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+        }
+        afterSuite(printTestResult)
     }
-    afterSuite(printTestResult)
 }
 
 val printTestResult: KotlinClosure2<TestDescriptor, TestResult, Void>
@@ -90,21 +99,30 @@ val printTestResult: KotlinClosure2<TestDescriptor, TestResult, Void>
 // TEST LOGGING -- END
 
 // JUNIT -- BEGIN
-tasks.withType<Test> {
-    useJUnitPlatform()
+allprojects {
+    tasks.withType<Test> {
+        useJUnitPlatform()
+    }
 }
 // JUNIT -- END
 
-repositories {
-    jcenter()
+// Dependencies -- BEGIN
+allprojects {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        "implementation"(platform(kotlin("bom")))
+        "implementation"(kotlin("stdlib-jdk8"))
+
+        "testImplementation"("org.junit.jupiter:junit-jupiter-api:5.6.2")
+        "testRuntimeOnly"("org.junit.jupiter:junit-jupiter-engine:5.6.2")
+        "testImplementation"("org.assertj:assertj-core:3.15.0")
+    }
 }
 
 dependencies {
-    implementation(platform(kotlin("bom")))
-    implementation(kotlin("stdlib-jdk8"))
     implementation("com.google.code.gson:gson:2.8.6")
-
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.2")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.2")
-    testImplementation("org.assertj:assertj-core:3.15.0")
 }
+// Dependencies -- END
