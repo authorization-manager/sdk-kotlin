@@ -13,7 +13,7 @@ allprojects {
 }
 // PLUGINS -- END
 
-// spotless configuration -- BEGIN
+// SPOTLESS -- BEGIN
 allprojects {
     apply(plugin = "com.diffplug.gradle.spotless")
 
@@ -34,7 +34,19 @@ allprojects {
         dependsOn(tasks.spotlessCheck)
     }
 }
-// spotless configuration -- END
+// SPOTLESS -- END
+
+// SOURCES -- BEGIN
+java {
+    withSourcesJar()
+}
+// SOURCES -- END
+
+// JAVADOC -- BEGIN
+java {
+    withJavadocJar()
+}
+// JAVADOC -- END
 
 // JaCoCo configuration -- BEGIN
 jacoco {
