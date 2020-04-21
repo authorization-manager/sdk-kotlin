@@ -48,7 +48,7 @@ java {
 }
 // JAVADOC -- END
 
-// JaCoCo configuration -- BEGIN
+// JACOCO -- BEGIN
 jacoco {
     toolVersion = "0.8.5"
 }
@@ -65,9 +65,9 @@ tasks.jacocoTestReport {
 tasks.build {
     dependsOn(tasks.jacocoTestReport)
 }
-// JaCoCo configuration -- END
+// JACOCO -- END
 
-// SonarQube configuration -- BEGIN
+// SonarQube -- BEGIN
 sonarqube {
     properties {
         property("sonar.host.url", "https://sonarcloud.io")
@@ -75,7 +75,7 @@ sonarqube {
         property("sonar.projectKey", "beforeigners_authorization-manager-sdk-kotlin")
     }
 }
-// SonarQube configuration -- END
+// SonarQube -- END
 
 // TEST LOGGING -- BEGIN
 allprojects {
