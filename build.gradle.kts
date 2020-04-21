@@ -49,21 +49,25 @@ java {
 // JAVADOC -- END
 
 // JACOCO -- BEGIN
-jacoco {
-    toolVersion = "0.8.5"
-}
+allprojects {
+    apply(plugin = "jacoco")
 
-tasks.jacocoTestReport {
-    reports {
-        xml.isEnabled = true
-        html.isEnabled = true
+    jacoco {
+        toolVersion = "0.8.5"
     }
 
-    dependsOn(tasks.test)
-}
+    tasks.jacocoTestReport {
+        reports {
+            xml.isEnabled = true
+            html.isEnabled = true
+        }
 
-tasks.build {
-    dependsOn(tasks.jacocoTestReport)
+        dependsOn(tasks.test)
+    }
+
+    tasks.build {
+        dependsOn(tasks.jacocoTestReport)
+    }
 }
 // JACOCO -- END
 
