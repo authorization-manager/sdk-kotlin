@@ -10,7 +10,7 @@ data class AuthorizationManager(val host: URI) {
     fun getUser(identifier: String): User {
         val httpClient: HttpClient = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build()
 
-        val requestBody = """{"query":"{getUser(identifier: \"$identifier\") {\n    identifier\n  }\n}","variables":{}}"""
+        val requestBody = """{"query":"{getUser(identifier: \"$identifier\") { identifier }}","variables":{}}"""
         val httpRequest: HttpRequest =
                 HttpRequest
                         .newBuilder()
