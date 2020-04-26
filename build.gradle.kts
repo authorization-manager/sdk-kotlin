@@ -75,8 +75,8 @@ allprojects {
 sonarqube {
     properties {
         property("sonar.host.url", "https://sonarcloud.io")
-        property("sonar.organization", "beforeigners")
-        property("sonar.projectKey", "beforeigners_authorization-manager-sdk-kotlin")
+        property("sonar.organization", "authorization-manager")
+        property("sonar.projectKey", "authorization-manager_sdk-kotlin")
     }
 }
 // SonarQube -- END

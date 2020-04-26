@@ -1,1 +1,1 @@
-rootProject.name = "authorization-manager-sdk-kotlin"
+rootProject.name = "sdk-kotlin"
