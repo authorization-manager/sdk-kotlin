@@ -9,7 +9,7 @@ plugins {
 
 allprojects {
     apply(plugin = "kotlin")
-    java.sourceCompatibility = JavaVersion.VERSION_1_8
+    java.sourceCompatibility = JavaVersion.VERSION_11
 }
 // PLUGINS -- END
 
@@ -136,10 +136,12 @@ allprojects {
         "testRuntimeOnly"("org.junit.jupiter:junit-jupiter-engine:5.6.2")
         "testImplementation"("io.mockk:mockk:1.10.0")
         "testImplementation"("org.assertj:assertj-core:3.15.0")
+        "testImplementation"("com.github.tomakehurst:wiremock-jre8:2.26.3")
     }
 }
 
 dependencies {
-    implementation("com.google.code.gson:gson:2.8.6")
+//    implementation("com.google.code.gson:gson:2.8.6")
+
 }
 // Dependencies -- END

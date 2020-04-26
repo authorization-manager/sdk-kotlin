@@ -1,6 +1,5 @@
 package com.davidgracia.software.authorizationmanager.sdk.kotlin
 
-import com.google.gson.Gson
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
@@ -41,13 +40,13 @@ data class AuthorizationManager(val host: URI) {
         return User("12345678", "xyz")
     }
 
-    private fun String.toUser(): User {
+/*    private fun String.toUser(): User {
         return Gson().fromJson(this, User::class.java)
     }
 
     private fun CreateUserData.toJson(): String {
         return Gson().toJson(this)
-    }
+    }*/
 }
 
 /*
