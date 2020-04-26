@@ -21,30 +21,31 @@ data class AuthorizationManager(val host: URI) {
 
         val response: HttpResponse<String> = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString())
 
-        return User("asdsdaf", "asddfa")
+        return User("asdsdaf", "se3232")
     }
 
-    fun save(user: User): User {
-        val httpClient: HttpClient = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build()
+    fun create(userData: CreateUserData): User {
+/*        val httpClient: HttpClient = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build()
 
         val httpRequest: HttpRequest =
                 HttpRequest
                         .newBuilder()
                         .uri(host)
                         .header("Content-Type", "application/json")
-                        .POST(HttpRequest.BodyPublishers.ofString(user.toJson()))
+                        .POST(HttpRequest.BodyPublishers.ofString(userData.toJson()))
                         .build()
 
         val response: HttpResponse<String> = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString())
 
-        return response.body().toUser()
+        return response.body().toUser()*/
+        return User("12345678", "xyz")
     }
 
     private fun String.toUser(): User {
         return Gson().fromJson(this, User::class.java)
     }
 
-    private fun User.toJson(): String {
+    private fun CreateUserData.toJson(): String {
         return Gson().toJson(this)
     }
 }
