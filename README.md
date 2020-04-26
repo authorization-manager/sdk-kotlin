@@ -14,6 +14,7 @@
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=authorization-manager_sdk-kotlin&metric=sqale_index)](https://sonarcloud.io/dashboard?id=authorization-manager_sdk-kotlin)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=authorization-manager_sdk-kotlin&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=authorization-manager_sdk-kotlin)
 
+
 ## Key concepts
 
 - User: person that use the service/product/system where this library is used.
