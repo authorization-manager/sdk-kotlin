@@ -141,7 +141,6 @@ allprojects {
 }
 
 dependencies {
-//    implementation("com.google.code.gson:gson:2.8.6")
-
+    implementation("com.google.code.gson:gson:2.8.6")
 }
 // Dependencies -- END

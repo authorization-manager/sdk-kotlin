@@ -1,89 +1,61 @@
 package com.davidgracia.software.authorizationmanager.sdk.kotlin
 
+import com.google.gson.JsonElement
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 
 data class AuthorizationManager(val host: URI) {
-    fun getUser(identifier: String): User {
-        val httpClient: HttpClient = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build()
-
-        val requestBody = """{"query":"{getUser(identifier: \"$identifier\") { identifier }}","variables":{}}"""
-        val httpRequest: HttpRequest =
-                HttpRequest
-                        .newBuilder()
-                        .uri(host)
-                        .header("Content-Type", "application/json")
-                        .POST(HttpRequest.BodyPublishers.ofString(requestBody))
-                        .build()
-
-        val response: HttpResponse<String> = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString())
-
-        return User("asdsdaf", "se3232")
-    }
 
     fun create(userData: CreateUserData): User {
-/*        val httpClient: HttpClient = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build()
+        val httpClient: HttpClient = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build()
+
+        val httpRequestBody: String = """
+            {
+                "query":
+                    "mutation {
+                        createUser(user: 
+                                { 
+                                    externalIdentifier: \"${userData.identifier}\"
+                                    name: \"${userData.name}\"
+                                }
+                        ) {
+                            identifier
+                            externalIdentifier
+                            name
+                        }
+                    }",
+                "variables": {}
+            }""".minifyJSON()
 
         val httpRequest: HttpRequest =
                 HttpRequest
                         .newBuilder()
                         .uri(host)
                         .header("Content-Type", "application/json")
-                        .POST(HttpRequest.BodyPublishers.ofString(userData.toJson()))
+                        .POST(HttpRequest.BodyPublishers.ofString(httpRequestBody))
                         .build()
 
         val response: HttpResponse<String> = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString())
 
-        return response.body().toUser()*/
-        return User("12345678", "xyz")
+        val jsonElement: JsonElement = JsonParser.parseString(response.body())
+        val jsonObject: JsonObject = jsonElement.asJsonObject
+        val createdUserJson: JsonObject = jsonObject.getAsJsonObject("data").getAsJsonObject("createUser")
+
+        return User(
+                identifier = createdUserJson.get("externalIdentifier").asString,
+                externalIdentifier = createdUserJson.get("identifier").asString,
+                name = createdUserJson.get("name").asString
+        )
     }
-
-/*    private fun String.toUser(): User {
-        return Gson().fromJson(this, User::class.java)
-    }
-
-    private fun CreateUserData.toJson(): String {
-        return Gson().toJson(this)
-    }*/
 }
 
-/*
-request
-mutation {
-  createUser(user: { name: "Carlos" }) {
-    name
-    identifier
-  }
+private fun String.minifyJSON(): String {
+    return this
+            .trim()
+            .trimIndent()
+            .filterNot { c: Char -> c.isWhitespace() }
 }
-
-response
-{
-  "data": {
-    "createUser": {
-      "name": "Carlos",
-      "identifier": "fc586ad9-fe83-4c7e-92b2-c4e44cfbfb04"
-    }
-  }
-}
-----------------------------------------------------------
-request
-query {
-  getUser(identifier: "1") {
-    identifier
-    name
-  }
-}
-
-response
-{
-  "data": {
-    "getUser": {
-      "identifier": "1",
-      "name": "John"
-    }
-  }
-}
-
-*/
