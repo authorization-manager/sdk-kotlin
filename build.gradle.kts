@@ -75,8 +75,8 @@ allprojects {
 sonarqube {
     properties {
         property("sonar.host.url", "https://sonarcloud.io")
-        property("sonar.organization", "authorization-manager")
-        property("sonar.projectKey", "authorization-manager_sdk-kotlin")
+        property("sonar.organization", "kerberos-platform")
+        property("sonar.projectKey", "kerberos-platform_sdk-kotlin")
     }
 }
 // SonarQube -- END
