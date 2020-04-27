@@ -14,7 +14,6 @@
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=kerberos-platform_sdk-kotlin&metric=sqale_index)](https://sonarcloud.io/dashboard?id=kerberos-platform_sdk-kotlin)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=kerberos-platform_sdk-kotlin&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=kerberos-platform_sdk-kotlin)
 
-
 ## Key concepts
 
 - User: person that use the service/product/system where this library is used.
