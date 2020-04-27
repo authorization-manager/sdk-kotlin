@@ -1,4 +1,4 @@
-# Kerberos platfor SDK Kotlin
+# Kerberos platform SDK Kotlin
 
 ![](https://github.com/kerberos-platform/sdk-kotlin/workflows/Push%20to%20master%20CI/badge.svg)
 
