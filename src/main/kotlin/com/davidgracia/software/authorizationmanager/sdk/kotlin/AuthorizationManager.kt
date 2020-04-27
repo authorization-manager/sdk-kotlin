@@ -13,10 +13,7 @@ data class AuthorizationManager(val host: URI) {
     fun create(userData: CreateUserData): User {
         val httpClient: HttpClient = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build()
 
-        val httpRequestBody: String = """
-            {
-                "query":
-                    "mutation {
+        val graphQLOperation = """mutation {
                         createUser(user: 
                                 { 
                                     externalIdentifier: \"${userData.identifier}\"
@@ -27,9 +24,13 @@ data class AuthorizationManager(val host: URI) {
                             externalIdentifier
                             name
                         }
-                    }",
+                    }"""
+
+        val httpRequestBody: String = """
+            {
+                "query": "$graphQLOperation",
                 "variables": {}
-            }""".minifyJSON()
+            }""".toNormalizedGraphQL()
 
         val httpRequest: HttpRequest =
                 HttpRequest
@@ -53,9 +54,10 @@ data class AuthorizationManager(val host: URI) {
     }
 }
 
-private fun String.minifyJSON(): String {
+private fun String.toNormalizedGraphQL(): String {
     return this
             .trim()
             .trimIndent()
-            .filterNot { c: Char -> c.isWhitespace() }
+            .replace('\n', ' ')
+            .replace(Regex("[ ]+"), " ")
 }

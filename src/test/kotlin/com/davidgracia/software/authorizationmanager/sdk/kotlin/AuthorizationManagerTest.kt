@@ -74,30 +74,24 @@ internal class AuthorizationManagerTest {
         )
     }
 
-    private fun String.minifyJSON(): String {
-        return this
-                .trim()
-                .trimIndent()
-                .filterNot { c: Char -> c.isWhitespace() }
-    }
+    private val graphQLOperation = """mutation {
+                createUser(user: 
+                        { 
+                            externalIdentifier: \"$identifier\"
+                            name: \"$name\"
+                        }
+                ) {
+                    identifier
+                    externalIdentifier
+                    name
+                }
+            }"""
 
     private val httpRequestBody = """
             {
-                "query":
-                    "mutation {
-                        createUser(user: 
-                                { 
-                                    externalIdentifier: \"$identifier\"
-                                    name: \"$name\"
-                                }
-                        ) {
-                            identifier
-                            externalIdentifier
-                            name
-                        }
-                    }",
+                "query": "$graphQLOperation",
                 "variables": {}
-            }""".minifyJSON()
+            }""".toNormalizedGraphQL()
 
     private val httpResponseBody = """
         {
@@ -110,4 +104,19 @@ internal class AuthorizationManagerTest {
             }
         }
     """.minifyJSON()
+
+    private fun String.toNormalizedGraphQL(): String {
+        return this
+                .trim()
+                .trimIndent()
+                .replace('\n', ' ')
+                .replace(Regex("[ ]+"), " ")
+    }
+
+    private fun String.minifyJSON(): String {
+        return this
+                .trim()
+                .trimIndent()
+                .filterNot { c: Char -> c.isWhitespace() }
+    }
 }
