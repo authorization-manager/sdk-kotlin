@@ -1,4 +1,4 @@
-package com.davidgracia.software.authorizationmanager.sdk.kotlin
+package com.github.kerberos.sdk.kotlin
 
 import com.google.gson.Gson
 import java.net.URI
@@ -19,7 +19,7 @@ data class AuthorizationManager(val host: URI) {
                         .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                         .build()
 
-        val response: HttpResponse<String> = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString())
+        httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString())
 
         return User("asdsdaf", "asddfa")
     }
