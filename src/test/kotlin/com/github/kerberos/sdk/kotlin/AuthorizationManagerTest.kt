@@ -18,8 +18,8 @@ internal class AuthorizationManagerTest {
     private val name: String = "Jack"
     private val identifier: String = "1234"
     private val externalIdentifier: String = "xyz"
-    private val createUserData = CreateUserData(identifier = identifier, name = name)
-    private val expectedUser = User(identifier = identifier, externalIdentifier = externalIdentifier, name = name)
+    private val createSubjectData = CreateSubjectData(identifier = identifier, name = name)
+    private val expectedSubject = Subject(identifier = identifier, externalIdentifier = externalIdentifier, name = name)
 
     private val wireMockServer: WireMockServer
     private var authorizationManager: AuthorizationManager? = null
@@ -51,18 +51,18 @@ internal class AuthorizationManagerTest {
     }
 
     @Test
-    fun `creates a user and responds the created user`() {
-        stubForCreateUser()
+    fun `creates a subject and responds the created subject`() {
+        subjectIsCreated()
 
-        authorizationManager!!.create(createUserData).let { createdUser: User ->
-            assertThat(createdUser)
+        authorizationManager!!.create(createSubjectData).let { createdSubject: Subject ->
+            assertThat(createdSubject)
                     .usingRecursiveComparison()
                     .ignoringFields(externalIdentifierFieldName)
-                    .isEqualTo(expectedUser)
+                    .isEqualTo(expectedSubject)
         }
     }
 
-    private fun stubForCreateUser() {
+    private fun subjectIsCreated() {
         wireMockServer.stubFor(
                 post(graphqlPathSegment)
                         .withRequestBody(equalToJson(httpRequestBody))
@@ -75,7 +75,7 @@ internal class AuthorizationManagerTest {
     }
 
     private val graphQLOperation = """mutation {
-                createUser(user: 
+                createSubject(user: 
                         { 
                             externalIdentifier: \"$identifier\"
                             name: \"$name\"
@@ -96,7 +96,7 @@ internal class AuthorizationManagerTest {
     private val httpResponseBody = """
         {
             "data": {
-                "createUser": {
+                "createSubject": {
                     "identifier": "$externalIdentifier",
                     "externalIdentifier": "$identifier",
                     "name": "$name"

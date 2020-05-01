@@ -10,14 +10,14 @@ import java.net.http.HttpResponse
 
 data class AuthorizationManager(val host: URI) {
 
-    fun create(userData: CreateUserData): User {
+    fun create(subjectData: CreateSubjectData): Subject {
         val httpClient: HttpClient = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build()
 
         val graphQLOperation = """mutation {
-                        createUser(user: 
+                        createSubject(user: 
                                 { 
-                                    externalIdentifier: \"${userData.identifier}\"
-                                    name: \"${userData.name}\"
+                                    externalIdentifier: \"${subjectData.identifier}\"
+                                    name: \"${subjectData.name}\"
                                 }
                         ) {
                             identifier
@@ -44,12 +44,12 @@ data class AuthorizationManager(val host: URI) {
 
         val jsonElement: JsonElement = JsonParser.parseString(response.body())
         val jsonObject: JsonObject = jsonElement.asJsonObject
-        val createdUserJson: JsonObject = jsonObject.getAsJsonObject("data").getAsJsonObject("createUser")
+        val createdSubjectJson: JsonObject = jsonObject.getAsJsonObject("data").getAsJsonObject("createSubject")
 
-        return User(
-                identifier = createdUserJson.get("externalIdentifier").asString,
-                externalIdentifier = createdUserJson.get("identifier").asString,
-                name = createdUserJson.get("name").asString
+        return Subject(
+                identifier = createdSubjectJson.get("externalIdentifier").asString,
+                externalIdentifier = createdSubjectJson.get("identifier").asString,
+                name = createdSubjectJson.get("name").asString
         )
     }
 }
