@@ -1,4 +1,4 @@
-package com.davidgracia.software.authorizationmanager.sdk.kotlin
+package com.github.kerberos.sdk.kotlin
 
 import java.net.URI
 import org.assertj.core.api.Assertions.assertThat
