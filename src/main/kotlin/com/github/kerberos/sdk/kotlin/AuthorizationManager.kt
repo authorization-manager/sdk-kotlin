@@ -1,89 +1,63 @@
 package com.github.kerberos.sdk.kotlin
 
-import com.google.gson.Gson
+import com.google.gson.JsonElement
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 
 data class AuthorizationManager(val host: URI) {
-    fun getUser(identifier: String): User {
+
+    fun create(subjectData: CreateSubjectData): Subject {
         val httpClient: HttpClient = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build()
 
-        val requestBody = """{"query":"{getUser(identifier: \"$identifier\") { identifier }}","variables":{}}"""
+        val graphQLOperation = """mutation {
+                        createSubject(user: 
+                                { 
+                                    externalIdentifier: \"${subjectData.identifier}\"
+                                    name: \"${subjectData.name}\"
+                                }
+                        ) {
+                            identifier
+                            externalIdentifier
+                            name
+                        }
+                    }"""
+
+        val httpRequestBody: String = """
+            {
+                "query": "$graphQLOperation",
+                "variables": {}
+            }""".toNormalizedGraphQL()
+
         val httpRequest: HttpRequest =
                 HttpRequest
                         .newBuilder()
                         .uri(host)
                         .header("Content-Type", "application/json")
-                        .POST(HttpRequest.BodyPublishers.ofString(requestBody))
-                        .build()
-
-        httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString())
-
-        return User("asdsdaf", "asddfa")
-    }
-
-    fun save(user: User): User {
-        val httpClient: HttpClient = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build()
-
-        val httpRequest: HttpRequest =
-                HttpRequest
-                        .newBuilder()
-                        .uri(host)
-                        .header("Content-Type", "application/json")
-                        .POST(HttpRequest.BodyPublishers.ofString(user.toJson()))
+                        .POST(HttpRequest.BodyPublishers.ofString(httpRequestBody))
                         .build()
 
         val response: HttpResponse<String> = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString())
 
-        return response.body().toUser()
-    }
+        val jsonElement: JsonElement = JsonParser.parseString(response.body())
+        val jsonObject: JsonObject = jsonElement.asJsonObject
+        val createdSubjectJson: JsonObject = jsonObject.getAsJsonObject("data").getAsJsonObject("createSubject")
 
-    private fun String.toUser(): User {
-        return Gson().fromJson(this, User::class.java)
-    }
-
-    private fun User.toJson(): String {
-        return Gson().toJson(this)
+        return Subject(
+                identifier = createdSubjectJson.get("externalIdentifier").asString,
+                externalIdentifier = createdSubjectJson.get("identifier").asString,
+                name = createdSubjectJson.get("name").asString
+        )
     }
 }
 
-/*
-request
-mutation {
-  createUser(user: { name: "Carlos" }) {
-    name
-    identifier
-  }
+private fun String.toNormalizedGraphQL(): String {
+    return this
+            .trim()
+            .trimIndent()
+            .replace('\n', ' ')
+            .replace(Regex("[ ]+"), " ")
 }
-
-response
-{
-  "data": {
-    "createUser": {
-      "name": "Carlos",
-      "identifier": "fc586ad9-fe83-4c7e-92b2-c4e44cfbfb04"
-    }
-  }
-}
-----------------------------------------------------------
-request
-query {
-  getUser(identifier: "1") {
-    identifier
-    name
-  }
-}
-
-response
-{
-  "data": {
-    "getUser": {
-      "identifier": "1",
-      "name": "John"
-    }
-  }
-}
-
-*/
