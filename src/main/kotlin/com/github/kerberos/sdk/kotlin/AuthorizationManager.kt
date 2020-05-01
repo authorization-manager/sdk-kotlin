@@ -1,4 +1,4 @@
-package com.davidgracia.software.authorizationmanager.sdk.kotlin
+package com.github.kerberos.sdk.kotlin
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
