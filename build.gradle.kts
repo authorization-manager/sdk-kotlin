@@ -37,14 +37,18 @@ allprojects {
 // SPOTLESS -- END
 
 // SOURCES -- BEGIN
-java {
-    withSourcesJar()
+allprojects {
+    java {
+        withSourcesJar()
+    }
 }
 // SOURCES -- END
 
 // JAVADOC -- BEGIN
-java {
-    withJavadocJar()
+allprojects {
+    java {
+        withJavadocJar()
+    }
 }
 // JAVADOC -- END
 
