@@ -4,14 +4,37 @@ plugins {
     `java-library`
     jacoco
     id("org.sonarqube") version "2.8"
+    id("com.jfrog.bintray") version "1.8.5"
+    `maven-publish`
     id("com.diffplug.gradle.spotless") version "3.28.1"
 }
 
 allprojects {
     apply(plugin = "kotlin")
-    java.sourceCompatibility = JavaVersion.VERSION_11
 }
 // PLUGINS -- END
+
+// JAVA VERSION -- BEGIN
+allprojects {
+    java.sourceCompatibility = JavaVersion.VERSION_11
+
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        kotlinOptions {
+            jvmTarget = "11"
+        }
+    }
+}
+// JAVA VERSION -- END
+
+// NULLABILITY -- BEGIN
+allprojects {
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        kotlinOptions {
+            freeCompilerArgs = listOf("-Xjsr305=strict")
+        }
+    }
+}
+// NULLABILITY -- END
 
 // SPOTLESS -- BEGIN
 allprojects {
@@ -129,12 +152,15 @@ allprojects {
 // Dependencies -- BEGIN
 allprojects {
     repositories {
+        mavenCentral()
         jcenter()
     }
 
     dependencies {
         "implementation"(platform(kotlin("bom")))
         "implementation"(kotlin("stdlib-jdk8"))
+        "implementation"(kotlin("reflect"))
+        "implementation"("javax.inject:javax.inject:1")
 
         "testImplementation"("org.junit.jupiter:junit-jupiter-api:5.6.2")
         "testRuntimeOnly"("org.junit.jupiter:junit-jupiter-engine:5.6.2")
@@ -148,3 +174,52 @@ dependencies {
     implementation("com.google.code.gson:gson:2.8.6")
 }
 // Dependencies -- END
+
+// Publishing -- BEGIN
+val mavenPublicationName: String = "maven"
+
+publishing {
+    publications {
+        create<MavenPublication>(mavenPublicationName) {
+            groupId = "com.github.kerberos"
+            artifactId = "sdk-kotlin"
+            version = project.version.toString()
+
+            from(components["java"])
+            pom {
+                name.set("Kerberos SDK Kotlin")
+                description.set("A concise description of my library")
+                url.set("https://github.com/kerberos-platform/sdk-kotlin")
+                licenses {
+                    license {
+                        name.set("The MIT License")
+                        url.set("https://opensource.org/licenses/MIT")
+                    }
+                }
+                scm {
+                    connection.set("scm:git:git://github.com/kerberos-platform/sdk-kotlin.git")
+                    developerConnection.set("scm:git:ssh://github.com/kerberos-platform/sdk-kotlin.git")
+                    url.set("https://github.com/kerberos-platform/sdk-kotlin")
+                }
+            }
+        }
+    }
+}
+
+bintray {
+    user = System.getProperty("bintray.user")
+    key = System.getProperty("bintray.key")
+    setPublications(mavenPublicationName)
+    publish = true
+    pkg.apply {
+        repo = "maven"
+        name = "sdk-kotlin"
+        userOrg = "kerberos-platform"
+        vcsUrl = "https://github.com/kerberos-platform/sdk-kotlin"
+        version.apply {
+            name = project.version.toString()
+        }
+    }
+}
+// Publishing -- END
+
