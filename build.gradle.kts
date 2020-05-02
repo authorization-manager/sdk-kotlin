@@ -222,4 +222,3 @@ bintray {
     }
 }
 // Publishing -- END
-
