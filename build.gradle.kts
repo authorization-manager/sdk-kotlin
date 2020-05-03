@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 // PLUGINS -- BEGIN
 plugins {
     kotlin("jvm") version "1.3.72"
@@ -18,7 +20,7 @@ allprojects {
 allprojects {
     java.sourceCompatibility = JavaVersion.VERSION_11
 
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    tasks.withType<KotlinCompile> {
         kotlinOptions {
             jvmTarget = "11"
         }
@@ -28,7 +30,7 @@ allprojects {
 
 // NULLABILITY -- BEGIN
 allprojects {
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    tasks.withType<KotlinCompile> {
         kotlinOptions {
             freeCompilerArgs = listOf("-Xjsr305=strict")
         }
@@ -169,7 +171,11 @@ allprojects {
         "testImplementation"("com.github.tomakehurst:wiremock-jre8:2.26.3")
     }
 }
+// Dependencies -- END
 
+// #####################################################################################################################
+
+// Dependencies -- BEGIN
 dependencies {
     implementation("com.google.code.gson:gson:2.8.6")
 }
