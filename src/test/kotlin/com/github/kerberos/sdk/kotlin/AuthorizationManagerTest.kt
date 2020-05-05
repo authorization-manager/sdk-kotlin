@@ -75,7 +75,7 @@ internal class AuthorizationManagerTest {
     }
 
     private val graphQLOperation = """mutation {
-                createSubject(user: 
+                createSubject(subject: 
                         { 
                             externalIdentifier: \"$identifier\"
                             name: \"$name\"

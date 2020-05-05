@@ -14,7 +14,7 @@ data class AuthorizationManager(val host: URI) {
         val httpClient: HttpClient = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build()
 
         val graphQLOperation = """mutation {
-                        createSubject(user: 
+                        createSubject(subject: 
                                 { 
                                     externalIdentifier: \"${subjectData.identifier}\"
                                     name: \"${subjectData.name}\"
