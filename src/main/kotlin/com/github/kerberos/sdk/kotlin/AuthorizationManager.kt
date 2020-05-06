@@ -13,51 +13,37 @@ data class AuthorizationManager(val host: URI) {
     fun create(subjectData: CreateSubjectData): Subject {
         val httpClient: HttpClient = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build()
 
-        val graphQLOperation = """mutation {
-                        createSubject(subject: 
-                                { 
-                                    externalIdentifier: \"${subjectData.identifier}\"
-                                    name: \"${subjectData.name}\"
-                                }
-                        ) {
-                            identifier
-                            externalIdentifier
-                            name
-                        }
-                    }"""
-
-        val httpRequestBody: String = """
-            {
-                "query": "$graphQLOperation",
-                "variables": {}
-            }""".toNormalizedGraphQL()
+        val subjectPostRequestDocument = """
+        {
+          "data": {
+            "type": "subjects",
+            "attributes": {
+                "externalIdentifier": "${subjectData.identifier}",
+                "name": "${subjectData.name}"
+            }
+          }
+        }
+        """
 
         val httpRequest: HttpRequest =
                 HttpRequest
                         .newBuilder()
                         .uri(host)
-                        .header("Content-Type", "application/json")
-                        .POST(HttpRequest.BodyPublishers.ofString(httpRequestBody))
+                        .header("Content-Type", "application/vnd.api+json")
+                        .POST(HttpRequest.BodyPublishers.ofString(subjectPostRequestDocument))
                         .build()
 
         val response: HttpResponse<String> = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString())
 
         val jsonElement: JsonElement = JsonParser.parseString(response.body())
-        val jsonObject: JsonObject = jsonElement.asJsonObject
-        val createdSubjectJson: JsonObject = jsonObject.getAsJsonObject("data").getAsJsonObject("createSubject")
+        val subjectPostResponseDocument: JsonObject = jsonElement.asJsonObject
+        val subjectPostResponseResource: JsonObject = subjectPostResponseDocument.getAsJsonObject("data")
+        val subjectPostResponseAttributes: JsonObject = subjectPostResponseResource.getAsJsonObject("attributes")
 
         return Subject(
-                identifier = createdSubjectJson.get("externalIdentifier").asString,
-                externalIdentifier = createdSubjectJson.get("identifier").asString,
-                name = createdSubjectJson.get("name").asString
+                identifier = subjectPostResponseAttributes.get("externalIdentifier").asString,
+                externalIdentifier = subjectPostResponseResource.get("id").asString,
+                name = subjectPostResponseAttributes.get("name").asString
         )
     }
-}
-
-private fun String.toNormalizedGraphQL(): String {
-    return this
-            .trim()
-            .trimIndent()
-            .replace('\n', ' ')
-            .replace(Regex("[ ]+"), " ")
 }

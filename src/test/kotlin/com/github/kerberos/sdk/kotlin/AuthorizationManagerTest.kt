@@ -23,10 +23,10 @@ internal class AuthorizationManagerTest {
 
     private val wireMockServer: WireMockServer
     private var authorizationManager: AuthorizationManager? = null
-    private var graphqlEndpoint: String? = null
-    private val graphqlPathSegment = "/graphql"
+    private var endpoint: String? = null
+    private val path = "/subjects"
     private val contentTypeHeaderKey = "Content-Type"
-    private val applicationJsonValue: String = "application/json"
+    private val applicationJsonApiValue: String = "application/vnd.api+json"
     private val externalIdentifierFieldName: String = "externalIdentifier"
 
     init {
@@ -41,8 +41,8 @@ internal class AuthorizationManagerTest {
     @BeforeEach
     fun setUp() {
         wireMockServer.start()
-        graphqlEndpoint = "${wireMockServer.baseUrl()}$graphqlPathSegment"
-        authorizationManager = AuthorizationManager(URI(graphqlEndpoint!!))
+        endpoint = "${wireMockServer.baseUrl()}$path"
+        authorizationManager = AuthorizationManager(URI(endpoint!!))
     }
 
     @AfterEach
@@ -64,59 +64,38 @@ internal class AuthorizationManagerTest {
 
     private fun subjectIsCreated() {
         wireMockServer.stubFor(
-                post(graphqlPathSegment)
+                post(path)
                         .withRequestBody(equalToJson(httpRequestBody))
-                        .withHeader(contentTypeHeaderKey, equalTo(applicationJsonValue))
+                        .withHeader(contentTypeHeaderKey, equalTo(applicationJsonApiValue))
                         .willReturn(aResponse()
-                                .withHeader(contentTypeHeaderKey, applicationJsonValue)
+                                .withHeader(contentTypeHeaderKey, applicationJsonApiValue)
                                 .withBody(httpResponseBody)
                         )
         )
     }
 
-    private val graphQLOperation = """mutation {
-                createSubject(subject: 
-                        { 
-                            externalIdentifier: \"$identifier\"
-                            name: \"$name\"
-                        }
-                ) {
-                    identifier
-                    externalIdentifier
-                    name
-                }
-            }"""
-
     private val httpRequestBody = """
-            {
-                "query": "$graphQLOperation",
-                "variables": {}
-            }""".toNormalizedGraphQL()
+        {
+          "data": {
+            "type": "subjects",
+            "attributes": {
+                "externalIdentifier": "$identifier",
+                "name": "$name"
+            }
+          }
+        }
+        """
 
     private val httpResponseBody = """
         {
-            "data": {
-                "createSubject": {
-                    "identifier": "$externalIdentifier",
-                    "externalIdentifier": "$identifier",
-                    "name": "$name"
-                }
+          "data": {
+            "id": "$externalIdentifier",
+            "type": "subjects",
+            "attributes": {
+                "externalIdentifier": "$identifier",
+                "name": "$name"
             }
+          }
         }
-    """.minifyJSON()
-
-    private fun String.toNormalizedGraphQL(): String {
-        return this
-                .trim()
-                .trimIndent()
-                .replace('\n', ' ')
-                .replace(Regex("[ ]+"), " ")
-    }
-
-    private fun String.minifyJSON(): String {
-        return this
-                .trim()
-                .trimIndent()
-                .filterNot { c: Char -> c.isWhitespace() }
-    }
+        """
 }
