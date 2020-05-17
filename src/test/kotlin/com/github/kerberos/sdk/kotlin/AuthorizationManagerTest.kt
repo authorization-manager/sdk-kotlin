@@ -17,9 +17,9 @@ internal class AuthorizationManagerTest {
 
     private val name: String = "Jack"
     private val identifier: String = "1234"
-    private val externalIdentifier: String = "xyz"
+    private val externalId: String = "xyz"
     private val createSubjectData = CreateSubjectData(identifier = identifier, name = name)
-    private val expectedSubject = Subject(identifier = identifier, externalIdentifier = externalIdentifier, name = name)
+    private val expectedSubject = Subject(identifier = identifier, externalId = externalId, name = name)
 
     private val wireMockServer: WireMockServer
     private var authorizationManager: AuthorizationManager? = null
@@ -27,7 +27,7 @@ internal class AuthorizationManagerTest {
     private val path = "/subjects"
     private val contentTypeHeaderKey = "Content-Type"
     private val applicationJsonApiValue: String = "application/vnd.api+json"
-    private val externalIdentifierFieldName: String = "externalIdentifier"
+    private val externalIdFieldName: String = "externalId"
 
     init {
         val wireMockConfiguration: WireMockConfiguration = options()
@@ -57,7 +57,7 @@ internal class AuthorizationManagerTest {
         authorizationManager!!.create(createSubjectData).let { createdSubject: Subject ->
             assertThat(createdSubject)
                     .usingRecursiveComparison()
-                    .ignoringFields(externalIdentifierFieldName)
+                    .ignoringFields(externalIdFieldName)
                     .isEqualTo(expectedSubject)
         }
     }
@@ -79,7 +79,7 @@ internal class AuthorizationManagerTest {
           "data": {
             "type": "subjects",
             "attributes": {
-                "externalIdentifier": "$identifier",
+                "externalId": "$identifier",
                 "name": "$name"
             }
           }
@@ -89,10 +89,10 @@ internal class AuthorizationManagerTest {
     private val httpResponseBody = """
         {
           "data": {
-            "id": "$externalIdentifier",
+            "id": "$externalId",
             "type": "subjects",
             "attributes": {
-                "externalIdentifier": "$identifier",
+                "externalId": "$identifier",
                 "name": "$name"
             }
           }

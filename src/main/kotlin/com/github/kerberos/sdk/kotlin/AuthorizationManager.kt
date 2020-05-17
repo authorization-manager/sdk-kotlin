@@ -18,7 +18,7 @@ data class AuthorizationManager(val host: URI) {
           "data": {
             "type": "subjects",
             "attributes": {
-                "externalIdentifier": "${subjectData.identifier}",
+                "externalId": "${subjectData.identifier}",
                 "name": "${subjectData.name}"
             }
           }
@@ -41,8 +41,8 @@ data class AuthorizationManager(val host: URI) {
         val subjectPostResponseAttributes: JsonObject = subjectPostResponseResource.getAsJsonObject("attributes")
 
         return Subject(
-                identifier = subjectPostResponseAttributes.get("externalIdentifier").asString,
-                externalIdentifier = subjectPostResponseResource.get("id").asString,
+                identifier = subjectPostResponseAttributes.get("externalId").asString,
+                externalId = subjectPostResponseResource.get("id").asString,
                 name = subjectPostResponseAttributes.get("name").asString
         )
     }
